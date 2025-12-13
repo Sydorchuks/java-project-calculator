@@ -87,7 +87,6 @@ public class CalculatorApp extends Application {
             return;
         }
 
-        // якщо був "=" і користувач починає нове число — починаємо новий вираз
         if (lastWasEquals && isDigit(value)) {
             expression.setLength(0);
             lastWasEquals = false;
@@ -117,7 +116,6 @@ public class CalculatorApp extends Application {
     private void appendDot() {
         normalizeIfDisplayError();
 
-        // знайти останній оператор, щоб перевірити крапку тільки в поточному числі
         int lastOp = lastOperatorIndex(expression);
         String currentNumber = expression.substring(lastOp + 1);
 
@@ -134,13 +132,11 @@ public class CalculatorApp extends Application {
     private void appendOperator(String op) {
         normalizeIfDisplayError();
 
-        // якщо тільки-но натиснули "=" і тепер оператор — продовжуємо від результату
         if (lastWasEquals) {
             lastWasEquals = false;
         }
 
         if (expression.length() == 0) {
-            // дозволимо мінус як початок від’ємного числа
             if ("-".equals(op)) {
                 expression.append("-");
                 updateDisplay();
@@ -148,7 +144,6 @@ public class CalculatorApp extends Application {
             return;
         }
 
-        // якщо останній символ вже оператор — замінюємо його (не даємо два підряд)
         char last = expression.charAt(expression.length() - 1);
         if (isOperatorChar(last)) {
             expression.setCharAt(expression.length() - 1, op.charAt(0));
@@ -166,7 +161,6 @@ public class CalculatorApp extends Application {
             String exp = expression.toString();
             if (exp.isEmpty()) return;
 
-            // не рахуємо якщо закінчується оператором
             char last = exp.charAt(exp.length() - 1);
             if (isOperatorChar(last)) return;
 
@@ -177,7 +171,6 @@ public class CalculatorApp extends Application {
 
             display.setText(formatted);
 
-            // ✅ головний фікс: результат стає новим виразом для наступних операцій
             expression.setLength(0);
             expression.append(formatted);
 
@@ -228,8 +221,6 @@ public class CalculatorApp extends Application {
     }
 
     private double eval(String exp) {
-        // підтримуємо тільки ОДНУ операцію (simple calculator): a op b
-        // але дозволяємо від’ємні числа
 
         int opIndex = findMainOperatorIndex(exp);
         if (opIndex == -1) {
@@ -255,13 +246,11 @@ public class CalculatorApp extends Application {
         };
     }
 
-    // шукає головний оператор між a і b, ігноруючи мінус як знак числа
     private int findMainOperatorIndex(String exp) {
         for (int i = 1; i < exp.length(); i++) {
             char ch = exp.charAt(i);
             if (ch == '+' || ch == '*' || ch == '/') return i;
             if (ch == '-') {
-                // якщо '-' не є знаком (тобто перед ним цифра або крапка), то це оператор
                 char prev = exp.charAt(i - 1);
                 if (Character.isDigit(prev) || prev == '.') return i;
             }
