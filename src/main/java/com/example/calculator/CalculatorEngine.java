@@ -79,6 +79,8 @@ public class CalculatorEngine {
         } else {
             expression.append(op);
         }
+
+        lastWasEquals = false;
     }
 
     private void backspace() {
@@ -93,46 +95,73 @@ public class CalculatorEngine {
     }
 
     private double eval(String exp) {
-        int opIndex = findMainOperatorIndex(exp);
-        if (opIndex == -1) return Double.parseDouble(exp);
+        exp = exp.replace(" ", "");
+        List<String> tokens = tokenize(exp);
 
-        String left = exp.substring(0, opIndex);
-        String right = exp.substring(opIndex + 1);
-        char op = exp.charAt(opIndex);
+        for (int i = 0; i < tokens.size(); i++) {
+            String t = tokens.get(i);
+            if ("*".equals(t) || "/".equals(t)) {
+                double a = Double.parseDouble(tokens.get(i - 1));
+                double b = Double.parseDouble(tokens.get(i + 1));
 
-        double a = Double.parseDouble(left);
-        double b = Double.parseDouble(right);
+                double res;
+                if ("*".equals(t)) {
+                    res = a * b;
+                } else {
+                    if (b == 0) throw new ArithmeticException();
+                    res = a / b;
+                }
 
-        return switch (op) {
-            case '+' -> a + b;
-            case '-' -> a - b;
-            case '*' -> a * b;
-            case '/' -> {
-                if (b == 0) throw new ArithmeticException();
-                yield a / b;
+                tokens.set(i - 1, String.valueOf(res));
+                tokens.remove(i);
+                tokens.remove(i);
+                i--;
             }
-            default -> throw new IllegalArgumentException("Unknown operator");
-        };
+        }
+
+        double result = Double.parseDouble(tokens.get(0));
+        for (int i = 1; i < tokens.size(); i += 2) {
+            String op = tokens.get(i);
+            double b = Double.parseDouble(tokens.get(i + 1));
+
+            if ("+".equals(op)) result += b;
+            else if ("-".equals(op)) result -= b;
+            else throw new IllegalArgumentException("Unknown operator");
+        }
+
+        return result;
     }
 
-    private int findMainOperatorIndex(String exp) {
-        for (int i = 1; i < exp.length(); i++) {
+    private List<String> tokenize(String exp) {
+        List<String> tokens = new ArrayList<>();
+        StringBuilder num = new StringBuilder();
+
+        for (int i = 0; i < exp.length(); i++) {
             char ch = exp.charAt(i);
-            if (ch == '+' || ch == '*' || ch == '/') return i;
-            if (ch == '-') {
-                char prev = exp.charAt(i - 1);
-                if (Character.isDigit(prev) || prev == '.') return i;
-            }
-        }
-        return -1;
-    }
 
-    private int lastOperatorIndex(CharSequence sb) {
-        for (int i = sb.length() - 1; i >= 0; i--) {
-            char ch = sb.charAt(i);
-            if (isOperatorChar(ch)) return i;
+            if (ch == '-' && (i == 0 || isOperatorChar(exp.charAt(i - 1)))) {
+                num.append(ch);
+                continue;
+            }
+
+            if (Character.isDigit(ch) || ch == '.') {
+                num.append(ch);
+                continue;
+            }
+
+            if (isOperatorChar(ch)) {
+                if (num.length() == 0) throw new IllegalArgumentException("Broken expression");
+                tokens.add(num.toString());
+                num.setLength(0);
+                tokens.add(String.valueOf(ch));
+                continue;
+            }
+
+            throw new IllegalArgumentException("Invalid char");
         }
-        return -1;
+
+        if (num.length() > 0) tokens.add(num.toString());
+        return tokens;
     }
 
     private String format(double value) {
@@ -150,5 +179,13 @@ public class CalculatorEngine {
 
     private boolean isOperatorChar(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/';
+    }
+
+    private int lastOperatorIndex(CharSequence sb) {
+        for (int i = sb.length() - 1; i >= 0; i--) {
+            char ch = sb.charAt(i);
+            if (isOperatorChar(ch)) return i;
+        }
+        return -1;
     }
 }
