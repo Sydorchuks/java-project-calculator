@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.calculator.CalculatorController">
+
+    <top>
+        <Label fx:id="displayLabel"
+               text="0"
+               BorderPane.alignment="CENTER_RIGHT"
+               style="-fx-font-size: 36px;"
+               minHeight="100">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+        </Label>
+    </top>
+
+    <center>
+        <GridPane hgap="10" vgap="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- IMPORTANT: make columns/rows evenly sized and fill -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS" fillWidth="true"/>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS" fillWidth="true"/>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS" fillWidth="true"/>
+                <ColumnConstraints percentWidth="25" hgrow="ALWAYS" fillWidth="true"/>
+            </columnConstraints>
+
+            <rowConstraints>
+                <RowConstraints percentHeight="20" vgrow="ALWAYS" fillHeight="true"/>
+                <RowConstraints percentHeight="20" vgrow="ALWAYS" fillHeight="true"/>
+                <RowConstraints percentHeight="20" vgrow="ALWAYS" fillHeight="true"/>
+                <RowConstraints percentHeight="20" vgrow="ALWAYS" fillHeight="true"/>
+                <RowConstraints percentHeight="20" vgrow="ALWAYS" fillHeight="true"/>
+            </rowConstraints>
+
+            <!-- Row 0 -->
+            <Button text="C"  onAction="#onButtonClick"
+                    GridPane.rowIndex="0" GridPane.columnIndex="0"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="⌫" onAction="#onButtonClick"
+                    GridPane.rowIndex="0" GridPane.columnIndex="1"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Label text="" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <Button text="/" onAction="#onButtonClick"
+                    GridPane.rowIndex="0" GridPane.columnIndex="3"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+
+            <!-- Row 1 -->
+            <Button text="7" onAction="#onButtonClick" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="8" onAction="#onButtonClick" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="9" onAction="#onButtonClick" GridPane.rowIndex="1" GridPane.columnIndex="2"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="*" onAction="#onButtonClick" GridPane.rowIndex="1" GridPane.columnIndex="3"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+
+            <!-- Row 2 -->
+            <Button text="4" onAction="#onButtonClick" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="5" onAction="#onButtonClick" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="6" onAction="#onButtonClick" GridPane.rowIndex="2" GridPane.columnIndex="2"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="-" onAction="#onButtonClick" GridPane.rowIndex="2" GridPane.columnIndex="3"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+
+            <!-- Row 3 -->
+            <Button text="1" onAction="#onButtonClick" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="2" onAction="#onButtonClick" GridPane.rowIndex="3" GridPane.columnIndex="1"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="3" onAction="#onButtonClick" GridPane.rowIndex="3" GridPane.columnIndex="2"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="+" onAction="#onButtonClick" GridPane.rowIndex="3" GridPane.columnIndex="3"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+
+            <!-- Row 4 -->
+            <Button text="0" onAction="#onButtonClick" GridPane.rowIndex="4" GridPane.columnIndex="0"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="." onAction="#onButtonClick" GridPane.rowIndex="4" GridPane.columnIndex="1"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Button text="=" onAction="#onButtonClick" GridPane.rowIndex="4" GridPane.columnIndex="2"
+                    maxWidth="1.7976931348623157E308" maxHeight="1.7976931348623157E308"/>
+            <Label text="" GridPane.rowIndex="4" GridPane.columnIndex="3"/>
+
+        </GridPane>
+    </center>
+
+
+    <right>
+        <ListView fx:id="historyList" prefWidth="250">
+            <BorderPane.margin>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </BorderPane.margin>
+        </ListView>
+    </right>
+
+</BorderPane>
